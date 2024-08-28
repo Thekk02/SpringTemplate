@@ -1,0 +1,101 @@
+#spring配置
+spring:
+  servlet:
+    multipart:
+      max-file-size: 2048MB
+      max-request-size: 1024MB
+  datasource:
+    dynamic:
+      primary: db1
+      strict: false
+      datasource:
+        db1: # 数据源1(mysql包括用户表部门表以及基础数据表)
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/victory?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+          username: root
+          password: 123456
+        db2: # 数据源2（plm数据库，负责查询和修改plm数据）
+          driver-class-name: org.postgresql.Driver
+          url: jdbc:postgresql://192.168.1.33:5432/vtle?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+          username: postgres
+          password: wtl@plm
+        db3: # 数据源3（201数据库，负责查询和修改201数据）
+          driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+          url: jdbc:sqlserver://10.0.1.20:1433;UFDATA_201_2020?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+          username: kk
+          password: 123456
+
+
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    property-naming-strategy: LOWER_CAMEL_CASE
+
+
+#开发环境配置
+server:
+  #服务端口
+  port: 8080
+  tomcat:
+    max-http-form-post-size: 256MB
+    connection-timeout: 18000
+    uri-encoding: UTF-8
+
+  ## 持久层配置
+#mybatis-plus:
+#  global-config:
+#    db-config:
+#      #主键类型
+#      id-type: ASSIGN_ID
+#      # 逻辑删除字段
+#      logic-delete-field: isDelete
+#      logic-delete-value: 1
+#      logic-not-delete-value: 0
+#      # 表名前缀
+  #枚举包扫描
+  type-enums-package: personal.kk.springtemplate.enums
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  address: localhost
+
+#项目监控程序配置
+management:
+  endpoints:
+    web:
+      exposure:
+        # 打开所有的监控点
+        include: "*"
+      # 自定义监控路径 monitor
+      # 默认值：http://localhost:8016/actuator/*
+      # 配置后：http://localhost:8016/monitor/*
+      base-path: /monitor
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      # 通过指定接口关闭 SpringBoot
+      enabled: true
+    beans:
+      enabled: true
+      cache:
+        time-to-live: 10000
+
+
+
+# 描述项目基础信息
+info:
+  app:
+    name: VictorySoftwarePlatform
+    port: 8080
+    version: 1.0.0
+    author: kk
+
+logging:
+  level:
+    com.baomidou.dynamic: debug
+
+ip:
+  blacklist: 192.168.73.20
+
+mybatis-plus:
+  mapper-locations: classpath*:personal/kk/springtemplate/mapper/*.xml
